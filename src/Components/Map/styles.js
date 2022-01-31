@@ -1,3 +1,4 @@
+import { MapContainer } from "react-leaflet";
 import styled from "styled-components";
 
 export const Wapper = styled.section`
@@ -5,3 +6,5 @@ export const Wapper = styled.section`
   width: 140vh;
   height: 80vh;
 `;
+
+export const Map = styled(MapContainer)``;

@@ -1,116 +1,161 @@
-import React, { useState } from "react";
+// todo: diminuir tamanho do arquivo
+import React from "react";
 import { useNavigate } from "react-router-dom";
-import { AiFillEye, AiFillEyeInvisible, AiOutlineLock } from "react-icons/ai";
+import { Formik } from "formik";
+import { registerApi } from "../../services/users";
 
 import * as S from "./styles";
+import { SignupValidationSchema } from "../../validations";
+import { useRegisterForm } from "./hooks";
+import coordinatesUf from "../../services/coordinates";
 
 const FormRegister = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
-  const [CPF, setCPF] = useState("");
-  const [date, setDate] = useState("");
-  const [peso, setPeso] = useState("");
-  const [altura, setAltura] = useState("");
-  const [UF, setUF] = useState("");
-  const [errors, setErrors] = useState({});
-  const [validate, setValidate] = useState({});
-  const [showPassword, setShowPassword] = useState(false);
-
   const navigate = useNavigate();
 
-  // onsubmit
-  const handleSubmit = () => {
-    navigate("/Home");
-  };
+  const { formValue, handleChange } = useRegisterForm();
 
-  const togglePassword = () => {
-    if (showPassword) {
-      setShowPassword(false);
-    } else {
-      setShowPassword(true);
+  const { name, cpf, type, date, email, password, uf, height, weight } =
+    formValue;
+
+  const handleSubmitRegister = async () => {
+    try {
+      const coord = await coordinatesUf(uf);
+
+      await registerApi({ ...formValue, coord });
+      navigate("/Home");
+    } catch (error) {
+      alert("Erro ao cadastrar");
     }
   };
 
   return (
     <S.Container>
-      <form method="POST" onSubmit={handleSubmit} autoComplete={"off"}>
-        <S.Form>
-          <S.Input
-            type="text"
-            id="name"
-            name="name"
-            value={name}
-            placeholder="Nome completo"
-            onChange={(e) => setName(e.target.value)}
-          />
-          {/* {errors && <S.TextError>erro</S.TextError>} */}
-          <S.Input
-            type="CPF"
-            id="CPF"
-            name="CPF"
-            value={CPF}
-            placeholder="CPF"
-            onChange={(e) => setCPF(e.target.value)}
-          />
-          {/* {errors && <S.TextError>erro</S.TextError>} */}
-          <S.Input
-            type="Date"
-            id="Date"
-            name="Date"
-            value={date}
-            placeholder="Data de nascimento"
-            onChange={(e) => setDate(e.target.value)}
-          />
-          {/* {errors && <S.TextError>erro</S.TextError>} */}
-          <S.Input
-            type="number"
-            name="peso"
-            id="peso"
-            value={peso}
-            placeholder="Peso em kg"
-            onChange={(e) => setPeso(e.target.value)}
-          />
-          {/* {errors && <S.TextError>erro</S.TextError>} */}
-          <S.Input
-            type="number"
-            id="altura"
-            name="altura"
-            value={altura}
-            placeholder="Altura em metros"
-            onChange={(e) => setAltura(e.target.value)}
-          />
-          {/* {errors && <S.TextError>erro</S.TextError>} */}
-          <S.Input
-            type="select"
-            name="uf"
-            id="uf"
-            value={UF}
-            placeholder="UF"
-            onChange={(e) => setUF(e.target.value)}
-          />
-          {/* {errors && <S.TextError>erro</S.TextError>} */}
-          <S.Input
-            type="email"
-            id="email"
-            name="email"
-            value={email}
-            placeholder="Email"
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          {/* {errors && <S.TextError>erro</S.TextError>} */}
-          <S.Input
-            type={showPassword ? "text" : "password"}
-            name="password"
-            id="password"
-            value={password}
-            placeholder="Password"
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          {/* {errors && <S.TextError>erro</S.TextError>} */}
-          <S.Button type="submit">Login</S.Button>
-        </S.Form>
-      </form>
+      <Formik
+        initialValues={{ email: "", senha: "" }}
+        validationSchema={SignupValidationSchema}
+        onSubmit={handleSubmitRegister}
+      >
+        {({ errors, touched }) => (
+          <form onSubmit={handleSubmitRegister}>
+            <S.Form>
+              <S.Input
+                type="text"
+                id="name"
+                name="name"
+                autoComplete="name"
+                aria-label="name"
+                aria-required="true"
+                placeholder="name"
+                value={name}
+                onChange={handleChange}
+              />
+              {errors.name && <S.TextError>{errors.name}</S.TextError>}
+              <S.Input
+                type="numeric"
+                id="cpf"
+                name="cpf"
+                autoComplete="cpf"
+                aria-label="cpf"
+                aria-required="true"
+                placeholder="cpf"
+                value={cpf}
+                onChange={handleChange}
+              />
+              {errors.cpf && <S.TextError>{errors.cpf}</S.TextError>}
+              <select value={type} placeholder="tipo" onChange={handleChange}>
+                <option value="">Selecione</option>
+                <option value="Paciente">Paciente</option>
+                <option value="Enfermeiro">Enfermeiro</option>
+              </select>
+              {errors.type && <S.TextError>{errors.type}</S.TextError>}
+              <S.Input
+                type="date"
+                id="date"
+                name="date"
+                aria-label="date"
+                placeholder="data de nasc"
+                value={date}
+                onChange={handleChange}
+              />
+              {errors.date && <S.TextError>{errors.date}</S.TextError>}
+              <S.Input
+                type="numeric"
+                id="weight"
+                name="weight"
+                aria-label="peso"
+                placeholder="peso em kg"
+                value={weight}
+                onChange={handleChange}
+              />
+              {errors.weight && <S.TextError>{errors.weight}</S.TextError>}
+              <S.Input
+                type="number"
+                id="altura"
+                name="height"
+                aria-label="peso"
+                value={height}
+                placeholder="Altura em metros"
+                onChange={handleChange}
+              />
+              {errors.height && <S.TextError>{errors.height}</S.TextError>}
+              <select value={uf} placeholder="UF" onChange={handleChange}>
+                <option value="">Selecione</option>
+                <option value="AC">AC</option>
+                <option value="AL">AL</option>
+                <option value="AP">AP</option>
+                <option value="AM">AM</option>
+                <option value="BA">BA</option>
+                <option value="CE">CE</option>
+                <option value="DF">DF</option>
+                <option value="ES">ES</option>
+                <option value="GO">GO</option>
+                <option value="MA">MA</option>
+                <option value="MS">MS</option>
+                <option value="MT">MT</option>
+                <option value="MG">MG</option>
+                <option value="PA">PA</option>
+                <option value="PB">PB</option>
+                <option value="PR">PR</option>
+                <option value="PE">PE</option>
+                <option value="PI">PI</option>
+                <option value="RJ">RJ</option>
+                <option value="RN">RN</option>
+                <option value="RS">RS</option>
+                <option value="RO">RO</option>
+                <option value="RR">RR</option>
+                <option value="SC">SC</option>
+                <option value="SP">SP</option>
+                <option value="SE">SE</option>
+                <option value="TO">TO</option>
+              </select>
+              {errors.uf && <S.TextError>{errors.uf}</S.TextError>}
+              <S.Input
+                type="email"
+                id="email"
+                name="email"
+                aria-label="email"
+                aria-required="true"
+                value={email}
+                placeholder="Email"
+                onChange={handleChange}
+              />
+              {errors.email && <S.TextError>{errors.email}</S.TextError>}
+              <S.Input
+                type="password"
+                id="senha"
+                name="password"
+                aria-label="senha"
+                aria-required="true"
+                placeholder="senha"
+                value={password}
+                onChange={handleChange}
+              />
+              {errors.password && <S.TextError>{errors.password}</S.TextError>}
+              <S.Button type="submit">Login</S.Button>
+            </S.Form>
+          </form>
+        )}
+      </Formik>
     </S.Container>
   );
 };
