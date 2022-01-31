@@ -5,7 +5,6 @@ import Home from "../Pages/HomeScreen";
 import Login from "../Pages/LoginScreen";
 import Register from "../Pages/RegisterScreen";
 
-// eslint-disable-next-line react/function-component-definition
 const RoutesScreen = () => {
   return (
     <Routes>

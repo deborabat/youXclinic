@@ -1,59 +1,76 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AiFillEye, AiFillEyeInvisible, AiOutlineLock } from "react-icons/ai";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+
+import { AiOutlineLock } from "react-icons/ai";
 
 import * as S from "./styles";
+import { LoginValidationScheme } from "../../validations";
+import { storageSetToken } from "../../storage";
+import { loginApi } from "../../services/login";
+import { useLoginForm } from "./hooks";
 
 const FormLogin = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState({});
-  const [validate, setValidate] = useState({});
-  const [showPassword, setShowPassword] = useState(false);
-
   const navigate = useNavigate();
 
-  // onsubmit
-  const handleSubmit = () => {
-    navigate("/Home");
-  };
+  const { formValue, handleChange: handleChangeFormData } = useLoginForm();
 
-  const togglePassword = () => {
-    if (showPassword) {
-      setShowPassword(false);
-    } else {
-      setShowPassword(true);
+  const { email, password } = formValue;
+
+  async function handleSubmitLogin() {
+    try {
+      const response = await loginApi({
+        email,
+        password,
+      });
+      const token = response.data?.access_token;
+      if (!token) throw Error();
+
+      storageSetToken(token);
+      navigate("/Home");
+    } catch (error) {
+      return alert("Credenciais invalidas");
     }
-  };
+  }
 
   return (
     <S.Container>
-      <form method="POST" onSubmit={handleSubmit} autoComplete={"off"}>
-        <S.Form>
-          <S.Icon>
-            <AiOutlineLock size="50px" color="#900c3f" />
-          </S.Icon>
-          <S.Input
-            type="email"
-            id="email"
-            name="email"
-            value={email}
-            placeholder="Email"
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          {/* {errors && <S.TextError>erro</S.TextError>} */}
-          <S.Input
-            type={showPassword ? "text" : "password"}
-            name="password"
-            id="password"
-            value={password}
-            placeholder="Password"
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          {/* {errors && <S.TextError>erro</S.TextError>} */}
-          <S.Button type="submit">Login</S.Button>
-        </S.Form>
-      </form>
+      <Formik
+        initialValues={{ email: "", password: "" }}
+        validationSchema={LoginValidationScheme}
+        onSubmit={handleSubmitLogin}
+      >
+        {({ errors }) => (
+          <Form onSubmit={handleSubmitLogin}>
+            <S.Form>
+              <S.Icon>
+                <AiOutlineLock size="50px" color="#900c3f" />
+              </S.Icon>
+              <S.Input
+                type="email"
+                id="email"
+                name="email"
+                autoComplete="email"
+                placeholder="email@example.com"
+                value={email}
+                onChange={handleChangeFormData}
+              />
+              {errors.email && <S.TextError>{errors.email}</S.TextError>}
+
+              <S.Input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Senha"
+                value={password}
+                onChange={handleChangeFormData}
+              />
+              {errors.password && <S.TextError>{errors.senha}</S.TextError>}
+              <S.Button type="submit">Login</S.Button>
+            </S.Form>
+          </Form>
+        )}
+      </Formik>
     </S.Container>
   );
 };

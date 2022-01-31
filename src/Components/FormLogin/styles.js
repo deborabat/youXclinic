@@ -33,7 +33,7 @@ export const Input = styled.input`
   color: #900c3f;
   width: 60vh;
   font-size: 1em;
-  margin: 1em;
+  margin: 0.5em;
   padding: 0.5em 1em;
   border: 0;
   border-radius: 3px;
@@ -51,10 +51,7 @@ export const IconEye = styled.button`
 export const TextError = styled.text`
   color: #900c3f;
   font-size: 1em;
-  margin: 1em;
   padding: 0.5em 1em;
-  border: 0;
-  border-radius: 3px;
 `;
 
 export const Icon = styled.section`
