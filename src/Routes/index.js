@@ -10,7 +10,7 @@ const RoutesScreen = () => {
     <Routes>
       <Route exact path="/" element={<Login />} />
       <Route path="/Home" element={<Home />} />
-      <Route path="/Regiter" element={<Register />} />
+      <Route path="/Register" element={<Register />} />
     </Routes>
   );
 };

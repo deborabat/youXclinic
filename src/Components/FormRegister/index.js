@@ -2,6 +2,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Formik } from "formik";
+import InputMask from "react-input-mask";
 import { registerApi } from "../../services/users";
 
 import * as S from "./styles";
@@ -35,7 +36,7 @@ const FormRegister = () => {
         validationSchema={SignupValidationSchema}
         onSubmit={handleSubmitRegister}
       >
-        {({ errors, touched }) => (
+        {({ errors }) => (
           <form onSubmit={handleSubmitRegister}>
             <S.Form>
               <S.Input
@@ -45,17 +46,17 @@ const FormRegister = () => {
                 autoComplete="name"
                 aria-label="name"
                 aria-required="true"
-                placeholder="name"
+                placeholder="nome completo"
                 value={name}
                 onChange={handleChange}
               />
-              {errors.name && <S.TextError>{errors.name}</S.TextError>}
+
               <S.Input
                 type="numeric"
                 id="cpf"
                 name="cpf"
                 autoComplete="cpf"
-                aria-label="cpf"
+                pattern="(\d{3}\.?\d{3}\.?\d{3}-?\d{2})|(\d{2}\.?\d{3}\.?\d{3}/?\d{4}-?\d{2})"
                 aria-required="true"
                 placeholder="cpf"
                 value={cpf}
@@ -67,7 +68,6 @@ const FormRegister = () => {
                 <option value="Paciente">Paciente</option>
                 <option value="Enfermeiro">Enfermeiro</option>
               </select>
-              {errors.type && <S.TextError>{errors.type}</S.TextError>}
               <S.Input
                 type="date"
                 id="date"
@@ -77,7 +77,6 @@ const FormRegister = () => {
                 value={date}
                 onChange={handleChange}
               />
-              {errors.date && <S.TextError>{errors.date}</S.TextError>}
               <S.Input
                 type="numeric"
                 id="weight"
@@ -87,17 +86,16 @@ const FormRegister = () => {
                 value={weight}
                 onChange={handleChange}
               />
-              {errors.weight && <S.TextError>{errors.weight}</S.TextError>}
               <S.Input
-                type="number"
-                id="altura"
+                type="numeric"
+                id="height"
                 name="height"
                 aria-label="peso"
                 value={height}
                 placeholder="Altura em metros"
                 onChange={handleChange}
               />
-              {errors.height && <S.TextError>{errors.height}</S.TextError>}
+              {/* to do refatorar selects */}
               <select value={uf} placeholder="UF" onChange={handleChange}>
                 <option value="">Selecione</option>
                 <option value="AC">AC</option>

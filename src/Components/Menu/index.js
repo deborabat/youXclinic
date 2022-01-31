@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useRef } from "react";
+import { Link } from "react-router-dom";
 import {
   AiFillEnvironment,
   AiFillPlusCircle,
@@ -16,56 +16,27 @@ const sidebarNavItems = [
     section: "",
   },
   {
-    display: "Regiter",
+    display: "Register",
     icon: <AiFillPlusCircle />,
-    to: "/Regiter",
-    section: "started",
+    to: "/Register",
+    section: "register",
   },
   {
     display: "log out",
     icon: <AiFillSetting />,
     to: "/",
-    section: "calendar",
+    section: "log out",
   },
 ];
 
 const Menu = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [stepHeight, setStepHeight] = useState(0);
-
   const sidebarRef = useRef();
   const indicatorRef = useRef();
-  const location = useLocation();
-
-  useEffect(() => {
-    setTimeout(() => {
-      const sidebarItem = sidebarRef.current.querySelector("S.menuItem");
-      indicatorRef.current.style.height = `${sidebarItem.clientHeight}px`;
-      setStepHeight(sidebarItem.clientHeight);
-    }, 50);
-  }, []);
-
-  // change active index
-  useEffect(() => {
-    const curPath = window.location.pathname.split("/")[1];
-    const activeItem = sidebarNavItems.findIndex(
-      (item) => item.section === curPath
-    );
-    setActiveIndex(curPath.length === 0 ? 0 : activeItem);
-  }, [location]);
 
   return (
     <S.Sidebar>
       <S.Container ref={sidebarRef}>
-        <div
-          ref={indicatorRef}
-          className="sidebar__menu__indicator"
-          style={{
-            transform: `translateX(-50%) translateY(${
-              activeIndex * stepHeight
-            }px)`,
-          }}
-        ></div>
+        <div ref={indicatorRef}></div>
         {sidebarNavItems.map((item, index) => (
           <Link to={item.to} key={index}>
             <S.MenuItem>
