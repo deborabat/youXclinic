@@ -22,9 +22,9 @@ const sidebarNavItems = [
     section: "started",
   },
   {
-    display: "Calendar",
+    display: "log out",
     icon: <AiFillSetting />,
-    to: "/calendar",
+    to: "/",
     section: "calendar",
   },
 ];
@@ -32,6 +32,7 @@ const sidebarNavItems = [
 const Menu = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [stepHeight, setStepHeight] = useState(0);
+
   const sidebarRef = useRef();
   const indicatorRef = useRef();
   const location = useLocation();

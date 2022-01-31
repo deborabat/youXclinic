@@ -4,14 +4,13 @@ import MarkerClusterGroup from "react-leaflet-markercluster";
 
 import * as S from "./styles";
 
-const Maps = () => {
-  const position = [51.505, -0.09];
-  const [location, setLocation] = useState(position);
+const Maps = ({ users }) => {
   return (
     <S.Wapper>
       <MapContainer
+        // todo: estilo inline
         style={{ height: "80vh", width: "140vh" }}
-        center={[51.0, 19.0]}
+        center={[-10.59, -55.1]}
         zoom={4}
         maxZoom={18}
         scrollWheelZoom={false}
@@ -22,9 +21,12 @@ const Maps = () => {
         />
 
         <MarkerClusterGroup>
-          <Marker position={[49.8397, 24.0297]} />
-          <Marker position={[52.2297, 21.0122]} />
-          <Marker position={[51.5074, -0.0901]} />
+          {users.map((item, index) => (
+            <Marker
+              key={index}
+              position={[item.coordinates.lat, item.coordinates.long]}
+            />
+          ))}
         </MarkerClusterGroup>
       </MapContainer>
     </S.Wapper>
