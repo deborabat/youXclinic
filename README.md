@@ -40,7 +40,7 @@ git clone https://github.com/deborabat/youXclinic.git
 :small_blue_diamond: Instale as dependencias do projeto 
 
 
-:small_blue_diamond: Inicio o projeto com:
+:small_blue_diamond: Inicio o projeto com (importante rodar na porta 3001):
 
 ```
 npm run start
