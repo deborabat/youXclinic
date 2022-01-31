@@ -7,6 +7,7 @@
 :small_blue_diamond: [Status](#status)
 :small_blue_diamond: [Funcionalidades ](#funcionalidades)
 :small_blue_diamond: [Tecnologias utilizadas](#tecnologias)
+:small_blue_diamond: [Como rodar a aplicação](#como-rodar-a-aplicação-arrow_forward)
  
 
 ## Descrição do projeto 
@@ -27,3 +28,29 @@ cadastradas em cada estado.
 
 > Link Reactjs: https://pt-br.reactjs.org/
 > Lnk React-leafle.js: https://react-leaflet.js.org/ 
+
+## Como rodar a aplicação :arrow_forward:
+
+:small_blue_diamond: No terminal, clone o projeto: 
+
+```
+git clone https://github.com/deborabat/youXclinic.git
+```
+
+:small_blue_diamond: Instale as dependencias do projeto 
+
+
+:small_blue_diamond: Inicio o projeto com:
+
+```
+npm run start
+
+yarn start
+```
+:small_blue_diamond: Ultilize as credenciais para logar:
+
+
+"email": "henrylucasoliveira..henrylucasoliveira@andritz.com",
+
+
+"password": "hpLuWrn1K9"
